@@ -1,4 +1,4 @@
-#!/usr/bin/filepath2 node
+#!/usr/bin/env node
 import commander from 'commander';
 import { existsSync } from 'fs';
 import genDiff from '../index.js';
