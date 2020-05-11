@@ -1,5 +1,5 @@
 {
-  "name": "tychkovas-gendiff",
+  "name": "aleksandrt-gendiff",
   "version": "1.0.0",
   "description": "Compares tho configuration files and shows a differene",
   "main": "index.js",
