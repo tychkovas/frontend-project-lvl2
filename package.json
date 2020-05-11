@@ -1,8 +1,8 @@
 {
-  "name": "gendiff",
+  "name": "tychkovas-gendiff",
   "version": "1.0.0",
   "description": "Compares tho configuration files and shows a differene",
-  "main": "bin/gendiff.js",
+  "main": "index.js",
   "bin": {
     "gendiff": "bin/gendiff.js"
   },
@@ -25,7 +25,8 @@
   },
   "homepage": "https://github.com/tychkovas/frontend-project-lvl2#readme",
   "dependencies": {
-    "commander": "^5.1.0"
+    "commander": "^5.1.0",
+    "lodash": "^4.17.15"
   },
   "devDependencies": {
     "eslint": "^6.8.0",
