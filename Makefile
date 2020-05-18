@@ -22,4 +22,7 @@ build:
 test:
 	npm test --watch
 
+test-coverage:
+	npm test -- --coverage
+
 .PHONY: test
