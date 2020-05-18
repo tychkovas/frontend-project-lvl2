@@ -1,6 +1,8 @@
 # "Вычислитель отличий"
 [![Maintainability](https://api.codeclimate.com/v1/badges/9bea08fa6ac93b2fd866/maintainability)](https://codeclimate.com/github/tychkovas/frontend-project-lvl2/maintainability) 
 
+[![Test Coverage](https://api.codeclimate.com/v1/badges/9bea08fa6ac93b2fd866/test_coverage)](https://codeclimate.com/github/tychkovas/frontend-project-lvl2/test_coverage)
+
 ![Node CI](https://github.com/tychkovas/frontend-project-lvl2/workflows/Node.js%20CI/badge.svg)
 
 ### GenDiff compares two configuration files and shows a difference.
