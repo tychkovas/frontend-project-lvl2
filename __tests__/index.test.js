@@ -10,35 +10,21 @@ let pathDiff;
 let fileDiff;
 let diffData;
 
+const pairsFilePath = [
+  ['before.json', 'after.json'],
+  ['before.yml', 'after.yml'],
+  ['before.ini', 'after.ini'],
+];
+
 beforeAll(() => {
   pathDiff = getFixturesPath('diffBeforeAfter.txt');
   fileDiff = readFileSync(pathDiff, 'UTF-8', 'r');
   diffData = fileDiff.split('\n');
 });
 
-test('test function genDiff: for JSON', () => {
-  pathFile1 = getFixturesPath('before.json');
-  pathFile2 = getFixturesPath('after.json');
-  const diffResult = genDiff(pathFile1, pathFile2);
-
-  for (let i = 1; i < diffData.length; i += 1) {
-    expect(diffResult).toMatch(diffData[i]);
-  }
-});
-
-test('test function genDiff: for yaml', () => {
-  pathFile1 = getFixturesPath('before.yml');
-  pathFile2 = getFixturesPath('after.yml');
-  const diffResult = genDiff(pathFile1, pathFile2);
-
-  for (let i = 1; i < diffData.length; i += 1) {
-    expect(diffResult).toMatch(diffData[i]);
-  }
-});
-
-test('test function genDiff: for ini', () => {
-  pathFile1 = getFixturesPath('before.ini');
-  pathFile2 = getFixturesPath('after.ini');
+test.each(pairsFilePath)('test function genDiff of file %s from file %s', (path1, path2) => {
+  pathFile1 = getFixturesPath(path1);
+  pathFile2 = getFixturesPath(path2);
   const diffResult = genDiff(pathFile1, pathFile2);
 
   for (let i = 1; i < diffData.length; i += 1) {
