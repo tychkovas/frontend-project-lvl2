@@ -1,6 +1,6 @@
 {
   "name": "aleksandrt-gendiff",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Compares tho configuration files and shows a differene",
   "main": "dist/index.js",
   "bin": {
