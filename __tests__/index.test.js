@@ -19,7 +19,7 @@ beforeAll(() => {
 test('test function genDiff: for JSON', () => {
   pathFile1 = getFixturesPath('before.json');
   pathFile2 = getFixturesPath('after.json');
-  const diffResult = genDiff(pathFile1, pathFile2, 'json');
+  const diffResult = genDiff(pathFile1, pathFile2);
 
   for (let i = 1; i < diffData.length; i += 1) {
     expect(diffResult).toMatch(diffData[i]);
@@ -29,7 +29,17 @@ test('test function genDiff: for JSON', () => {
 test('test function genDiff: for yaml', () => {
   pathFile1 = getFixturesPath('before.yml');
   pathFile2 = getFixturesPath('after.yml');
-  const diffResult = genDiff(pathFile1, pathFile2, 'yml');
+  const diffResult = genDiff(pathFile1, pathFile2);
+
+  for (let i = 1; i < diffData.length; i += 1) {
+    expect(diffResult).toMatch(diffData[i]);
+  }
+});
+
+test('test function genDiff: for ini', () => {
+  pathFile1 = getFixturesPath('before.ini');
+  pathFile2 = getFixturesPath('after.ini');
+  const diffResult = genDiff(pathFile1, pathFile2);
 
   for (let i = 1; i < diffData.length; i += 1) {
     expect(diffResult).toMatch(diffData[i]);
