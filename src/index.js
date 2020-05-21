@@ -14,21 +14,19 @@ const compareConfig = (configBefore, configAfter) => {
   const addedAndModifiedKeys = keysAfter
     .filter((key) => configAfter[key] !== configBefore[key]);
 
-  const configChandges = unionKeys
-    .map((key) => {
-      if (unmodifiedKeys.includes(key)) {
-        return `    ${key}: ${configAfter[key]}`;
-      }
-      const result = [];
-      if (addedAndModifiedKeys.includes(key)) {
-        result[0] = (`  + ${key}: ${configAfter[key]}`);
-      }
-      if (deletedAndModifiedKeys.includes(key)) {
-        result[result.length] = (`  - ${key}: ${configBefore[key]}`);
-      }
-      return result;
-    })
-    .flat().join('\n');
+  const configChandges = unionKeys.map((key) => {
+    if (unmodifiedKeys.includes(key)) {
+      return `    ${key}: ${configAfter[key]}`;
+    }
+    const result = [];
+    if (addedAndModifiedKeys.includes(key)) {
+      result[0] = (`  + ${key}: ${configAfter[key]}`);
+    }
+    if (deletedAndModifiedKeys.includes(key)) {
+      result[result.length] = (`  - ${key}: ${configBefore[key]}`);
+    }
+    return result;
+  }).flat().join('\n');
   const textChandges = `\n{\n${configChandges}\n}`;
   return textChandges;
 };
