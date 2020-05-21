@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import commander from 'commander';
 import { existsSync } from 'fs';
-import { extname, basename } from 'path';
+import { extname } from 'path';
 import genDiff from '../index.js';
 
 const { program } = commander;
