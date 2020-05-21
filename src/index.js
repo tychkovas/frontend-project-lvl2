@@ -7,7 +7,6 @@ const compareConfig = (configBefore, configAfter) => {
   const keysBefore = Object.keys(configBefore);
   const keysAfter = Object.keys(configAfter);
   const unionKeys = _.union(keysBefore, keysAfter);
-
   const deletedAndModifiedKeys = keysBefore
     .filter((key) => configBefore[key] !== configAfter[key]);
   const unmodifiedKeys = keysAfter
@@ -30,9 +29,7 @@ const compareConfig = (configBefore, configAfter) => {
       return result;
     })
     .flat().join('\n');
-
   const textChandges = `\n{\n${configChandges}\n}`;
-
   return textChandges;
 };
 
