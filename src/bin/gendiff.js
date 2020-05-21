@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import commander from 'commander';
 import { existsSync } from 'fs';
+import { extname, basename } from 'path';
 import genDiff from '../index.js';
 
 const { program } = commander;
@@ -11,24 +12,27 @@ program
   .helpOption('-h, --HELP', 'output usage information')
   .option('-f, --format [type]', 'output format');
 
-const availableFileFormats = ['json', 'yml'];
+const availableFileFormats = ['.json', '.yml', '.ini'];
+
+const isCorrectFilePath = (filepath) => {
+  if (!existsSync(filepath)) {
+    console.log(`error: file '${filepath}' does not exists`);
+    return false;
+  }
+  const extnameFile = extname(filepath);
+  if (!availableFileFormats.includes(extnameFile)) {
+    console.log(`error: format file '${filepath}' does not available`);
+    return false;
+  }
+  return true;
+};
 
 program
-  .arguments('<filepath1> <filepath2> <fileformat>')
-  .action((filepath1, filepath2, fileformat) => {
-    if (existsSync(filepath1)) {
-      if (existsSync(filepath2)) {
-        if (availableFileFormats.includes(fileformat)) {
-          const diff = genDiff(filepath1, filepath2, fileformat);
-          console.log(diff);
-        } else {
-          console.log(`error: format '${fileformat}' does not available`);
-        }
-      } else {
-        console.log(`error: file '${filepath2}' does not exists`);
-      }
-    } else {
-      console.log(`error: file '${filepath1}' does not exists`);
+  .arguments('<filepath1> <filepath2>')
+  .action((filepath1, filepath2) => {
+    if (isCorrectFilePath(filepath1) && isCorrectFilePath(filepath2)) {
+      const diff = genDiff(filepath1, filepath2);
+      console.log(diff);
     }
   });
 
