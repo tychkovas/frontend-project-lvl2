@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import fs from 'fs';
+import parse from './parsers';
 
 const compareConfig = (configBefore, configAfter) => {
   const keysBefore = Object.keys(configBefore);
@@ -34,12 +35,12 @@ const compareConfig = (configBefore, configAfter) => {
   return textChandges;
 };
 
-const genDiff = (pathToFile1, pathToFile2) => {
+const genDiff = (pathToFile1, pathToFile2, format) => {
   const fileData1 = fs.readFileSync(pathToFile1, 'UTF-8', 'r');
   const fileDate2 = fs.readFileSync(pathToFile2, 'UTF-8', 'r');
 
-  const config1 = JSON.parse(fileData1);
-  const config2 = JSON.parse(fileDate2);
+  const config1 = parse(fileData1, format);
+  const config2 = parse(fileDate2, format);
 
   const diffConfig = compareConfig(config1, config2);
 
