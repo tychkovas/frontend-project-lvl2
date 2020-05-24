@@ -3,32 +3,43 @@ import fs from 'fs';
 import { extname } from 'path';
 import parse from './parsers';
 
+const stateDiff = ['unmodified', 'add', 'modified', 'deleted', 'nested'];
+const [unmod, add, mod, del, nest] = stateDiff;
+
 const compareConfig = (configBefore, configAfter) => {
   const keysBefore = Object.keys(configBefore);
   const keysAfter = Object.keys(configAfter);
   const unionKeys = _.union(keysBefore, keysAfter);
-  const deletedAndModifiedKeys = keysBefore
+  const deletedKeys = keysBefore
+    .filter((key) => !keysAfter.includes(key));
+  const modifiedKeys = keysBefore
+    .filter((key) => !deletedKeys.includes(key))
     .filter((key) => configBefore[key] !== configAfter[key]);
   const unmodifiedKeys = keysAfter
     .filter((key) => configBefore[key] === configAfter[key]);
-  const addedAndModifiedKeys = keysAfter
-    .filter((key) => configAfter[key] !== configBefore[key]);
-
+  const addedKeys = keysAfter
+    .filter((key) => !keysBefore.includes(key));
   const configChandges = unionKeys.map((key) => {
     if (unmodifiedKeys.includes(key)) {
-      return `    ${key}: ${configAfter[key]}`;
+      return { [key]: [unmod, configAfter[key], null] };
     }
-    const result = [];
-    if (addedAndModifiedKeys.includes(key)) {
-      result[0] = (`  + ${key}: ${configAfter[key]}`);
+    if (deletedKeys.includes(key)) {
+      return { [key]: [del, configBefore[key], null] };
     }
-    if (deletedAndModifiedKeys.includes(key)) {
-      result[result.length] = (`  - ${key}: ${configBefore[key]}`);
+    if (addedKeys.includes(key)) {
+      return { [key]: [add, configAfter[key], null] };
     }
-    return result;
-  }).flat().join('\n');
-  const textChandges = `\n{\n${configChandges}\n}`;
-  return textChandges;
+    if (modifiedKeys.includes(key)) {
+      if (typeof configAfter[key] === 'object'
+       && typeof configBefore[key] === 'object') {
+        const configMod = compareConfig(configBefore[key], configAfter[key]);
+        return { [key]: [nest, configMod, null] };
+      }
+      return { [key]: [mod, configAfter[key], configBefore[key]] };
+    }
+    return 'error return';
+  });
+  return configChandges;
 };
 
 const genDiff = (pathToFile1, pathToFile2) => {

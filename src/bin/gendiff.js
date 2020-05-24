@@ -3,6 +3,7 @@ import commander from 'commander';
 import { existsSync } from 'fs';
 import { extname } from 'path';
 import genDiff from '../index.js';
+import stylish from '../format.js';
 
 const { program } = commander;
 
@@ -32,7 +33,7 @@ program
   .action((filepath1, filepath2) => {
     if (isCorrectFilePath(filepath1) && isCorrectFilePath(filepath2)) {
       const diff = genDiff(filepath1, filepath2);
-      console.log(diff);
+      console.log(stylish(diff));
     }
   });
 
