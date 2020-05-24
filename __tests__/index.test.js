@@ -18,7 +18,7 @@ const pairsFilePath = [
 ];
 
 beforeAll(() => {
-  pathDiff = getFixturesPath('diffBeforeAfter.txt');
+  pathDiff = getFixturesPath('result.txt');
   fileDiff = readFileSync(pathDiff, 'UTF-8', 'r');
   diffData = fileDiff.split('\n');
 });
