@@ -20,11 +20,11 @@ const parseDiffs = (key, data, spaceCnt) => {
     return resultObj;
   };
 
-  let [state, value1, value2] = [null, null, null];
+  let [state, value1] = [null, null];
   if (Array.isArray(data)) {
-    [state, value1, value2] = data;
+    [state, value1] = data;
   } else {
-    [state, value1, value2] = [unmod, data, null];
+    [state, value1] = [unmod, data];
   }
 
   const lines = [];
@@ -47,11 +47,6 @@ const parseDiffs = (key, data, spaceCnt) => {
     lines.push(`${indent}    }`);
   } else {
     lines.push(`${indent} ${sign} ${key}: ${value1}`);
-  }
-
-  if (value2 !== null) {
-    result = parseDiffs(key, [del, value2, null], spaceCnt);
-    lines.push(result);
   }
   return lines.flat(2);
 };

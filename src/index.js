@@ -22,25 +22,26 @@ const compareConfig = (configBefore, configAfter) => {
     .filter((key) => !keysBefore.includes(key));
   const configChandges = unionKeys.map((key) => {
     if (unmodifiedKeys.includes(key)) {
-      return { [key]: [unmod, configAfter[key], null] };
+      return { [key]: [unmod, configAfter[key]] };
     }
     if (deletedKeys.includes(key)) {
-      return { [key]: [del, configBefore[key], null] };
+      return { [key]: [del, configBefore[key]] };
     }
     if (addedKeys.includes(key)) {
-      return { [key]: [add, configAfter[key], null] };
+      return { [key]: [add, configAfter[key]] };
     }
     if (modifiedKeys.includes(key)) {
       if (typeof configAfter[key] === 'object'
        && typeof configBefore[key] === 'object') {
         const configMod = compareConfig(configBefore[key], configAfter[key]);
-        return { [key]: [nest, configMod, null] };
+        return { [key]: [nest, configMod] };
       }
-      return { [key]: [mod, configAfter[key], configBefore[key]] };
+      return [{ [key]: [add, configAfter[key]] },
+        { [key]: [del, configBefore[key]] }];
     }
     return 'error return';
   });
-  return configChandges;
+  return configChandges.flat();
 };
 
 const availableFormats = ['.json', '.yml', '.ini'];
