@@ -1,0 +1,19 @@
+import _ from 'lodash';
+import stylish from './stylish';
+
+const plain = require('./plain');
+// import plain from './plain';
+
+const formats = {
+  stylish: (diff) => stylish(diff),
+  plain: (diff) => plain(diff),
+};
+
+const getFormat = (type) => {
+  if (!_.has(formats, type)) {
+    throw new Error('error: format type does not exists');
+  }
+  return formats[type];
+};
+
+export default getFormat;
