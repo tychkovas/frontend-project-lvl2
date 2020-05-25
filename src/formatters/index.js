@@ -1,8 +1,6 @@
 import _ from 'lodash';
 import stylish from './stylish';
-
-const plain = require('./plain');
-// import plain from './plain';
+import plain from './plain';
 
 const formats = {
   stylish: (diff) => stylish(diff),
