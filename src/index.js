@@ -4,8 +4,8 @@ import { extname } from 'path';
 import parse from './parsers';
 import stylish from './format.js';
 
-const stateDiff = ['unmodified', 'add', 'modified', 'deleted', 'nested'];
-const [unmod, add, mod, del, nest] = stateDiff;
+const stateDiff = ['unmodified', 'add', 'deleted', 'nested'];
+const [unmod, add, del, nest] = stateDiff;
 
 const compareConfig = (configBefore, configAfter) => {
   const keysBefore = Object.keys(configBefore);

@@ -1,15 +1,12 @@
 
-const stateDiff = ['unmodified', 'add', 'modified', 'deleted', 'nested'];
-const [unmod, add, mod, del, nest] = stateDiff;
+const stateDiff = ['unmodified', 'add', 'deleted', 'nested'];
+const [unmod, add, del, nest] = stateDiff;
 const tabSize = 4;
 
 const getSign = (curStatus) => {
   if (curStatus === add) return ' +';
   if (curStatus === del) return ' -';
-  if (curStatus === mod) return ' +';
-  if (curStatus === unmod) return '  ';
-  if (curStatus === nest) return '  ';
-  return 'not status';
+  return '  '; // unmod && nest
 };
 
 const parseDiffs = (key, data, spaceCnt) => {
