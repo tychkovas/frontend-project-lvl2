@@ -2,6 +2,7 @@ import _ from 'lodash';
 import fs from 'fs';
 import { extname } from 'path';
 import parse from './parsers';
+import stylish from './format.js';
 
 const stateDiff = ['unmodified', 'add', 'modified', 'deleted', 'nested'];
 const [unmod, add, mod, del, nest] = stateDiff;
@@ -42,18 +43,27 @@ const compareConfig = (configBefore, configAfter) => {
   return configChandges;
 };
 
-const genDiff = (pathToFile1, pathToFile2) => {
-  const formatFile1 = extname(pathToFile1);
-  const formatFile2 = extname(pathToFile2);
-  const fileData1 = fs.readFileSync(pathToFile1, 'UTF-8', 'r');
-  const fileDate2 = fs.readFileSync(pathToFile2, 'UTF-8', 'r');
+const availableFormats = ['.json', '.yml', '.ini'];
+
+const genDiff = (filepath1, filepath2, format) => {
+  if (format !== 'stylish') return `error: format '${format}' does not exists`;
+  if (!fs.existsSync(filepath1)) return `error: file '${filepath1}' does not exists`;
+  if (!fs.existsSync(filepath2)) return `error: file '${filepath2}' does not exists`;
+
+  const formatFile1 = extname(filepath1);
+  const formatFile2 = extname(filepath2);
+  if (!availableFormats.includes(formatFile1)) return `error: format file '${filepath1}' does not available`;
+  if (!availableFormats.includes(formatFile2)) return `error: format file '${filepath2}' does not available`;
+
+  const fileData1 = fs.readFileSync(filepath1, 'UTF-8', 'r');
+  const fileDate2 = fs.readFileSync(filepath2, 'UTF-8', 'r');
 
   const config1 = parse(fileData1, formatFile1);
   const config2 = parse(fileDate2, formatFile2);
 
   const diffConfig = compareConfig(config1, config2);
-
-  return diffConfig;
+  const formattedDiff = stylish(diffConfig);
+  return formattedDiff;
 };
 
 export default genDiff;

@@ -23,12 +23,11 @@ beforeAll(() => {
   diffData = fileDiff.split('\n');
 });
 
-test.each(pairsFilePath)('test function genDiff of file %s from file %s', (path1, path2) => {
+test.each(pairsFilePath)('test genDiff of file %s from file %s stylish format', (path1, path2) => {
   pathFile1 = getFixturesPath(path1);
   pathFile2 = getFixturesPath(path2);
-  const diffResult = genDiff(pathFile1, pathFile2);
-  const diffFormated = stylish(diffResult);
+  const diffResult = genDiff(pathFile1, pathFile2, 'stylish');
   for (let i = 1; i < diffData.length; i += 1) {
-    expect(diffFormated).toMatch(diffData[i]);
+    expect(diffResult).toMatch(diffData[i]);
   }
 });
