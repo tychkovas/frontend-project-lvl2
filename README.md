@@ -23,9 +23,15 @@ $ sudo npm link
 ## Example 
 ### JSON
 [![asciicast](https://asciinema.org/a/329147.svg)](https://asciinema.org/a/329147)
+#### recurcive files config JSON
+[![asciicast](https://asciinema.org/a/333717.svg)](https://asciinema.org/a/333717)
 
 ### YAML
 [![asciicast](https://asciinema.org/a/O2MamekoBKa00LoJ7zCOn9eBE.svg)](https://asciinema.org/a/O2MamekoBKa00LoJ7zCOn9eBE)
+#### recurcive files config YAML
+[![asciicast](https://asciinema.org/a/333719.svg)](https://asciinema.org/a/333719)
 
 ### INI
 [![asciicast](https://asciinema.org/a/332658.svg)](https://asciinema.org/a/332658)
+#### recurcive files config INI
+[![asciicast](https://asciinema.org/a/333720.svg)](https://asciinema.org/a/333720)
