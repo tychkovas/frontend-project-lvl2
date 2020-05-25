@@ -1,6 +1,6 @@
 
-const stateDiff = ['unmodified', 'add', 'deleted', 'nested'];
-const [unmod, add, del, nest] = stateDiff;
+const stateDiff = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
+const [unmod, add, del, nest, mod] = stateDiff;
 const tabSize = 4;
 
 const getSign = (curStatus) => {
@@ -17,11 +17,11 @@ const parseDiffs = (key, data, spaceCnt) => {
     return resultObj;
   };
 
-  let [state, value1] = [null, null];
+  let [state, value] = [null, null];
   if (Array.isArray(data)) {
-    [state, value1] = data;
+    [state, value] = data;
   } else {
-    [state, value1] = [unmod, data];
+    [state, value] = [unmod, data];
   }
 
   const lines = [];
@@ -29,23 +29,32 @@ const parseDiffs = (key, data, spaceCnt) => {
   const sign = getSign(state);
   let result;
 
-  if (typeof value1 === 'object') {
+  if (state === mod) {
+    const [valueAdd, valueDel] = value;
+    parseDiffs(key, [add, valueAdd], spaceCnt);
+    parseDiffs(key, [del, valueDel], spaceCnt);
+  }
+  if (state === mod) {
+    const [valueAdd, valueDel] = value;
+    return [parseDiffs(key, [add, valueAdd], spaceCnt), parseDiffs(key, [del, valueDel], spaceCnt)];
+  }
+  if (typeof value === 'object') {
     lines.push(`${indent} ${sign} ${key}: {`);
 
     if (state === nest) {
-      result = value1.map(getDiff);
+      result = value.map(getDiff);
       lines.push(result);
     } else {
-      const [value1Key] = Object.keys(value1);
-      result = parseDiffs(value1Key, value1[value1Key], spaceCnt + tabSize);
+      const [value1Key] = Object.keys(value);
+      result = parseDiffs(value1Key, value[value1Key], spaceCnt + tabSize);
       lines.push(result);
     }
 
     lines.push(`${indent}    }`);
   } else {
-    lines.push(`${indent} ${sign} ${key}: ${value1}`);
+    lines.push(`${indent} ${sign} ${key}: ${value}`);
   }
-  return lines.flat(2);
+  return lines.flat(3);
 };
 
 const stylish = (diff) => {

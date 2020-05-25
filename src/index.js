@@ -4,8 +4,8 @@ import { extname } from 'path';
 import parse from './parsers';
 import stylish from './format.js';
 
-const stateDiff = ['unmodified', 'add', 'deleted', 'nested'];
-const [unmod, add, del, nest] = stateDiff;
+const stateDiff = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
+const [unmod, add, del, nest, mod] = stateDiff;
 
 const compareConfig = (configBefore, configAfter) => {
   const keysBefore = Object.keys(configBefore);
@@ -36,12 +36,11 @@ const compareConfig = (configBefore, configAfter) => {
         const configMod = compareConfig(configBefore[key], configAfter[key]);
         return { [key]: [nest, configMod] };
       }
-      return [{ [key]: [add, configAfter[key]] },
-        { [key]: [del, configBefore[key]] }];
+      return { [key]: [mod, [configAfter[key], configBefore[key]]] };
     }
     return 'error return';
   });
-  return configChandges.flat();
+  return configChandges;
 };
 
 const availableFormats = ['.json', '.yml', '.ini'];
