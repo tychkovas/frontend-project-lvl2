@@ -1,7 +1,6 @@
 import { join } from 'path';
 import { readFileSync } from 'fs';
 import genDiff from '../src/index.js';
-import stylish from '../src/format.js';
 
 const getFixturesPath = (filename) => join(__dirname, '..', '__fixtures__', filename);
 
