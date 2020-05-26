@@ -21,6 +21,7 @@ $ sudo npm link
 ```
 
 ## Example 
+### Default 'stylish' fortmat out
 ### JSON
 [![asciicast](https://asciinema.org/a/329147.svg)](https://asciinema.org/a/329147)
 #### recurcive files config JSON
@@ -35,3 +36,6 @@ $ sudo npm link
 [![asciicast](https://asciinema.org/a/332658.svg)](https://asciinema.org/a/332658)
 #### recurcive files config INI
 [![asciicast](https://asciinema.org/a/333720.svg)](https://asciinema.org/a/333720)
+
+## 'Plain' format out for config INI
+[![asciicast](https://asciinema.org/a/333948.svg)](https://asciinema.org/a/333948)
