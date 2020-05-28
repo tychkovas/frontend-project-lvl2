@@ -1,8 +1,8 @@
 ---
 common: 
   setting1: "Value 1"
-  setting2: "200"
-  setting3: "true"
+  setting2: 200
+  setting3: true
   setting6: 
     key: "value"
 group1: 
@@ -11,5 +11,5 @@ group1:
   nest: 
     key: "value"
 group2: 
-  abc: "12345"
+  abc: 12345
   

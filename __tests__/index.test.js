@@ -16,10 +16,11 @@ const pairsFilePath = [
   ['before.yml', 'after.yml'],
   ['before.ini', 'after.ini'],
 ];
-const formats = ['stylish', 'plain'];
+const formats = ['stylish', 'plain', 'json'];
 const pathDiffFiles = {
   stylish: 'diff-stylish.txt',
   plain: 'diff-plain.txt',
+  json: 'diff-json.json',
 };
 
 describe.each(formats)('test dinDiff', (format) => {

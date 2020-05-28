@@ -1,10 +1,12 @@
 import _ from 'lodash';
 import stylish from './stylish';
 import plain from './plain';
+import json from './json';
 
 const formats = {
   stylish: (diff) => stylish(diff),
   plain: (diff) => plain(diff),
+  json: (diff) => json(diff),
 };
 
 const getFormat = (type) => {
