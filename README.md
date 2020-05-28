@@ -39,3 +39,6 @@ $ sudo npm link
 
 ## 'Plain' format out for config INI
 [![asciicast](https://asciinema.org/a/333948.svg)](https://asciinema.org/a/333948)
+
+## 'JSON' fortmat out for confif YAML
+[![asciicast](https://asciinema.org/a/334582.svg)](https://asciinema.org/a/334582)
