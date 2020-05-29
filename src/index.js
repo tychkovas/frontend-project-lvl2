@@ -4,8 +4,10 @@ import { extname } from 'path';
 import parse from './parsers';
 import getFormat from './formatters';
 
+const keysNode = ['name', 'type', 'value', 'children'];
+// const [name, type, value, children] = keysNode;
 const stateDiff = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
-const [unmod, add, del, nest, mod] = stateDiff;
+const [unmod, add, del, nested, mod] = stateDiff;
 
 const compareConfig = (configBefore, configAfter) => {
   const keysBefore = Object.keys(configBefore);
@@ -22,21 +24,23 @@ const compareConfig = (configBefore, configAfter) => {
     .filter((key) => !keysBefore.includes(key));
   const configChandges = unionKeys.map((key) => {
     if (unmodifiedKeys.includes(key)) {
-      return { [key]: [unmod, configAfter[key]] };
+      return { name: key, type: unmod, value: configAfter[key] };
     }
     if (deletedKeys.includes(key)) {
-      return { [key]: [del, configBefore[key]] };
+      return { name: key, type: del, value: configBefore[key] };
     }
     if (addedKeys.includes(key)) {
-      return { [key]: [add, configAfter[key]] };
+      return { name: key, type: add, value: configAfter[key] };
     }
     if (modifiedKeys.includes(key)) {
       if (typeof configAfter[key] === 'object'
        && typeof configBefore[key] === 'object') {
         const configMod = compareConfig(configBefore[key], configAfter[key]);
-        return { [key]: [nest, configMod] };
+        return { name: key, type: nested, children: configMod };
       }
-      return { [key]: [mod, [configAfter[key], configBefore[key]]] };
+      const valueAdd = { name: key, type: add, value: configAfter[key] };
+      const valueDel = { name: key, type: del, value: configBefore[key] };
+      return { name: key, type: mod, nodes: [valueAdd, valueDel] };
     }
     return 'error return';
   });
