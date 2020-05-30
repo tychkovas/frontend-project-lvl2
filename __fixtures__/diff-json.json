@@ -1,1 +1,24 @@
-[{"common":["nested",[{"setting1":["unmodified","Value 1"]},{"setting2":["deleted",200]},{"setting3":["modified",[{"key":"value"},true]]},{"setting6":["nested",[{"key":["unmodified","value"]},{"ops":["add","vops"]}]]},{"follow":["add",false]},{"setting4":["add","blah blah"]},{"setting5":["add",{"key5":"value5"}]}]]},{"group1":["nested",[{"baz":["modified",["bars","bas"]]},{"foo":["unmodified","bar"]},{"nest":["modified",["str",{"key":"value"}]]}]]},{"group2":["deleted",{"abc":12345}]},{"group3":["add",{"fee":100500}]}]
+[
+  {"name":"common","type":"nested","children":[
+    {"name":"setting1","type":"unmodified","value":"Value 1"},
+    {"name":"setting2","type":"deleted","value":200},
+    {"name":"setting3","type":"modified","nodes":[
+      {"name":"setting3","type":"add","value":{"key":"value"}},
+      {"name":"setting3","type":"deleted","value":true}
+    ]},
+    {"name":"setting6","type":"nested","children":[
+      {"name":"key","type":"unmodified","value":"value"},
+      {"name":"ops","type":"add","value":"vops"}
+    ]},
+    {"name":"follow","type":"add","value":false},
+    {"name":"setting4","type":"add","value":"blah blah"},
+    {"name":"setting5","type":"add","value":{"key5":"value5"}}
+  ]},
+  {"name":"group1","type":"nested","children":[
+    {"name":"baz","type":"modified","nodes":[{"name":"baz","type":"add","value":"bars"},{"name":"baz","type":"deleted","value":"bas"}]},
+    {"name":"foo","type":"unmodified","value":"bar"},
+    {"name":"nest","type":"modified","nodes":[{"name":"nest","type":"add","value":"str"},{"name":"nest","type":"deleted","value":{"key":"value"}}]}
+  ]},
+  {"name":"group2","type":"deleted","value":{"abc":12345}},
+  {"name":"group3","type":"add","value":{"fee":100500}}
+]

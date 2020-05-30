@@ -33,6 +33,9 @@ describe.each(formats)('test dinDiff', (format) => {
     pathFile1 = getFixturesPath(path1);
     pathFile2 = getFixturesPath(path2);
     const diffResult = genDiff(pathFile1, pathFile2, format);
+    if (format === 'json') {
+      diffData = diffData.map((str) => str.trim());
+    }
     for (let i = 1; i < diffData.length; i += 1) {
       expect(diffResult).toMatch(diffData[i]);
     }
