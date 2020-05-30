@@ -1,5 +1,5 @@
-const typeNodeDiff = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
-const [unmod, add, del, nested, mod] = typeNodeDiff;
+const typesNode = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
+const [unmod, add, del, nested, mod] = typesNode;
 const outValue = (value) => (typeof value !== 'object' ? value : '[complex value]');
 
 const makePlain = (diff) => {
@@ -20,24 +20,21 @@ const makePlain = (diff) => {
       }
       if (node.type === nested) {
         const { children } = node;
-        const result = children.map((nestedObj) => getDiffs([...path, node.name], nestedObj))
-          .flat(1);
-        return result;
+        return children.map((nestedObj) => getDiffs([...path, node.name], nestedObj))
+          .flat();
       }
       if (node.type === unmod) {
         return [];
       }
       throw new Error(`Unknown type of node: '${node.type}'!`);
     };
-    const result = parseDiffs(pathObj, obj);
-    return result;
+    return parseDiffs(pathObj, obj);
   };
   const rootPath = [];
   const textDiff = diff.map((obj) => getDiffs(rootPath, obj))
     .flat()
     .join('\n');
-  const text = `${textDiff}`;
-  return text;
+  return `${textDiff}`;
 };
 
 export default makePlain;

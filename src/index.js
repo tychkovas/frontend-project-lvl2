@@ -4,8 +4,8 @@ import { extname } from 'path';
 import parse from './parsers';
 import getFormat from './formatters';
 
-const stateDiff = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
-const [unmod, add, del, nested, mod] = stateDiff;
+const typesNode = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
+const [unmod, add, del, nested, mod] = typesNode;
 
 const compareConfig = (configBefore, configAfter) => {
   const keysBefore = Object.keys(configBefore);
@@ -40,7 +40,7 @@ const compareConfig = (configBefore, configAfter) => {
       const valueDel = { name: key, type: del, value: configBefore[key] };
       return { name: key, type: mod, nodes: [valueAdd, valueDel] };
     }
-    return 'error return';
+    throw new Error(`Unknown key: '${key}'!`);
   });
   return configChandges;
 };
@@ -63,8 +63,7 @@ const genDiff = (filepath1, filepath2, formatType) => {
   const config2 = parse(fileDate2, formatFile2);
 
   const diffConfig = compareConfig(config1, config2);
-  const formattedDiff = format(diffConfig);
-  return formattedDiff;
+  return format(diffConfig);
 };
 
 export default genDiff;
