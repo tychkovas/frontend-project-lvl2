@@ -4,8 +4,6 @@ import { extname } from 'path';
 import parse from './parsers';
 import getFormat from './formatters';
 
-const keysNode = ['name', 'type', 'value', 'children'];
-// const [name, type, value, children] = keysNode;
 const stateDiff = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
 const [unmod, add, del, nested, mod] = stateDiff;
 

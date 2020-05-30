@@ -1,15 +1,17 @@
 import yaml from 'js-yaml';
 import ini from 'ini';
 
-const parse = (text, format) => {
+const parse = (data, format) => {
   if (format === '.json') {
-    return JSON.parse(text);
+    return JSON.parse(data);
   }
   if (format === '.yml') {
-    return yaml.safeLoad(text);
+    return yaml.safeLoad(data);
   }
-  // if (format === '.ini') {
-  return ini.parse(text);
+  if (format === '.ini') {
+    return ini.parse(data);
+  }
+  throw new Error(`Unknown format: '${format}'!`);
 };
 
 export default parse;

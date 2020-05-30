@@ -51,8 +51,8 @@ const parseDiffs = (node, spaceCnt) => {
 };
 
 const stylish = (diff) => {
-  console.log('diff: ', diff);
-  console.log(' ---------==============-----------');
+  // console.log('diff: ', diff);
+  // console.log(' ---------==============-----------');
   const textDiff = diff.map((obj) => {
     const result = parseDiffs(obj, 0);
     return result;
