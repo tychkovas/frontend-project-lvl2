@@ -1,6 +1,4 @@
 # Makefile gendiff
-run-test:
-	npx babel-node ./src/run-test.js
 	
 install:
 	npm install
