@@ -3,3 +3,4 @@
 dist
 coverage
 src/run-test.js
+/.vscode/
