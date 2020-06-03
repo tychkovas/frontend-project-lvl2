@@ -8,39 +8,26 @@ const typesNode = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
 const [unmod, add, del, nested, mod] = typesNode;
 
 const compareConfig = (configBefore, configAfter) => {
-  const keysBefore = Object.keys(configBefore);
-  const keysAfter = Object.keys(configAfter);
-  const unionKeys = _.union(keysBefore, keysAfter);
-  const deletedKeys = keysBefore
-    .filter((key) => !keysAfter.includes(key));
-  const modifiedKeys = keysBefore
-    .filter((key) => !deletedKeys.includes(key))
-    .filter((key) => configBefore[key] !== configAfter[key]);
-  const unmodifiedKeys = keysAfter
-    .filter((key) => configBefore[key] === configAfter[key]);
-  const addedKeys = keysAfter
-    .filter((key) => !keysBefore.includes(key));
+  const unionKeys = _.union(Object.keys(configBefore), Object.keys(configAfter));
   const configChandges = unionKeys.map((key) => {
-    if (unmodifiedKeys.includes(key)) {
-      return { name: key, type: unmod, value: configAfter[key] };
+    const value1 = configBefore[key];
+    const value2 = configAfter[key];
+    if (_.has(configBefore, key) && !_.has(configAfter, key)) {
+      return { name: key, type: del, value: value1 };
     }
-    if (deletedKeys.includes(key)) {
-      return { name: key, type: del, value: configBefore[key] };
+    if (!_.has(configBefore, key) && _.has(configAfter, key)) {
+      return { name: key, type: add, value: value2 };
     }
-    if (addedKeys.includes(key)) {
-      return { name: key, type: add, value: configAfter[key] };
+    if (value1 === value2) {
+      return { name: key, type: unmod, value: value2 };
     }
-    if (modifiedKeys.includes(key)) {
-      if (typeof configAfter[key] === 'object'
-       && typeof configBefore[key] === 'object') {
-        const configMod = compareConfig(configBefore[key], configAfter[key]);
-        return { name: key, type: nested, children: configMod };
-      }
-      const valueAdd = { name: key, type: add, value: configAfter[key] };
-      const valueDel = { name: key, type: del, value: configBefore[key] };
-      return { name: key, type: mod, nodes: [valueAdd, valueDel] };
+    if (typeof value2 === 'object' && typeof value1 === 'object') {
+      const configMod = compareConfig(value1, value2);
+      return { name: key, type: nested, children: configMod };
     }
-    throw new Error(`Unknown key: '${key}'!`);
+    const valueAdd = { name: key, type: add, value: value2 };
+    const valueDel = { name: key, type: del, value: value1 };
+    return { name: key, type: mod, nodes: [valueAdd, valueDel] };
   });
   return configChandges;
 };
