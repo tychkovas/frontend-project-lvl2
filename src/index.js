@@ -37,12 +37,12 @@ const availableFormats = ['json', 'yml', 'yaml', 'ini'];
 const genDiff = (filepath1, filepath2, formatType) => {
   const format = getFormat(formatType);
 
-  if (!fs.existsSync(filepath1)) return `error: file '${filepath1}' does not exists`;
-  if (!fs.existsSync(filepath2)) return `error: file '${filepath2}' does not exists`;
+  if (!fs.existsSync(filepath1)) throw new Error(`error: file '${filepath1}' does not exists`);
+  if (!fs.existsSync(filepath2)) throw new Error(`error: file '${filepath2}' does not exists`);
   const formatFile1 = extname(filepath1).substr(1);
   const formatFile2 = extname(filepath2).substr(1);
-  if (!availableFormats.includes(formatFile1)) return `error: format file '${filepath1}' does not available`;
-  if (!availableFormats.includes(formatFile2)) return `error: format file '${filepath2}' does not available`;
+  if (!availableFormats.includes(formatFile1)) throw new Error(`error: format file '${filepath1}' does not available`);
+  if (!availableFormats.includes(formatFile2)) throw new Error(`error: format file '${filepath2}' does not available`);
   const fileData1 = fs.readFileSync(filepath1, 'UTF-8', 'r');
   const fileDate2 = fs.readFileSync(filepath2, 'UTF-8', 'r');
 
