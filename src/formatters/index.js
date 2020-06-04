@@ -6,7 +6,7 @@ import json from './json';
 const formats = {
   stylish: (diff) => stylish(diff),
   plain: (diff) => plain(diff),
-  json: (diff) => json(diff),
+  json: (diff) => json(diff, null, 2),
 };
 
 const getFormat = (type) => {
