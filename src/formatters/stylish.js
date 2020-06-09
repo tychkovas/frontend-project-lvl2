@@ -9,41 +9,47 @@ const getSign = (curStatus) => {
   return '  '; // unmod && nested && mod
 };
 
-const parseDiffs = (node, spaceCnt) => {
-  const { name, type } = node;
-  const indent = ' '.repeat(spaceCnt);
-  const sign = getSign(type);
-  const nodeBegin = `${indent} ${sign} ${name}: {`;
-  const nodeEnd = `${indent}    }`;
+const buildTree = (diff, spacesCount) => {
+  const parseDiffs = ({
+    name, type, value, children, node,
+  }, spaces) => {
+    const indent = ' '.repeat(spaces);
+    const sign = getSign(type);
+    const nodeBegin = `${indent} ${sign} ${name}: {`;
+    const nodeEnd = `${indent}    }`;
+    if (typeof value === 'object') {
+      const [key] = Object.keys(value);
+      const nodeVal = parseDiffs({ name: key, type: unmodified, value: value[key] },
+        spaces + tabSize);
+      return [nodeBegin, nodeVal, nodeEnd].flat();
+    }
+    switch (type) {
+      case modified: {
+        const [valueAdd, valueDel] = node;
+        const nodeAdd = parseDiffs(valueAdd, spaces);
+        const nodeDel = parseDiffs(valueDel, spaces);
+        return [nodeAdd, nodeDel].flat();
+      }
+      case nested: {
+        const nodeValues = buildTree(children, spaces + tabSize);
+        return [nodeBegin, nodeValues, nodeEnd].flat(2);
+      }
+      case add:
+      case deleted:
+      case unmodified:
+      {
+        return (`${indent} ${sign} ${name}: ${value}`);
+      }
+      default: {
+        throw new Error(`Unknown type of node: '${node.type}'!`);
+      }
+    }
+  };
 
-  if (type === modified) {
-    const [valueAdd, valueDel] = node.node;
-    const nodeAdd = parseDiffs(valueAdd, spaceCnt);
-    const nodeDel = parseDiffs(valueDel, spaceCnt);
-    return [nodeAdd, nodeDel].flat();
-  }
-  if (type === nested) {
-    const { children } = node;
-    const nodeValues = children.map((obj) => parseDiffs(obj, spaceCnt + tabSize));
-    return [nodeBegin, nodeValues, nodeEnd].flat(2);
-  }
-  const { value } = node;
-  if (typeof value === 'object') {
-    const [key] = Object.keys(value);
-    const nodeVal = parseDiffs({ name: key, type: unmodified, value: value[key] },
-      spaceCnt + tabSize);
-    return [nodeBegin, nodeVal, nodeEnd].flat();
-  }
-  if (type === add || deleted || unmodified) {
-    return (`${indent} ${sign} ${name}: ${value}`);
-  }
-  throw new Error(`Unknown type of node: '${node.type}'!`);
-};
-
-const stylish = (diff) => {
-  const textDiff = diff.map((obj) => parseDiffs(obj, 0))
+  const textDiff = diff.map((obj) => parseDiffs(obj, spacesCount))
     .flat().join('\n');
-  return `{\n${textDiff}\n}`;
+  return textDiff;
 };
 
+const stylish = (diff) => `{\n${buildTree(diff, 0)}\n}`;
 export default stylish;
