@@ -1,11 +1,11 @@
 
 const typesNode = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
-const [unmod, add, del, nested, mod] = typesNode;
+const [unmodified, add, deleted, nested, modified] = typesNode;
 const tabSize = 4;
 
 const getSign = (curStatus) => {
   if (curStatus === add) return ' +';
-  if (curStatus === del) return ' -';
+  if (curStatus === deleted) return ' -';
   return '  '; // unmod && nested && mod
 };
 
@@ -16,8 +16,8 @@ const parseDiffs = (node, spaceCnt) => {
   const nodeBegin = `${indent} ${sign} ${name}: {`;
   const nodeEnd = `${indent}    }`;
 
-  if (type === mod) {
-    const [valueAdd, valueDel] = node.nodes;
+  if (type === modified) {
+    const [valueAdd, valueDel] = node.node;
     const nodeAdd = parseDiffs(valueAdd, spaceCnt);
     const nodeDel = parseDiffs(valueDel, spaceCnt);
     return [nodeAdd, nodeDel].flat();
@@ -30,10 +30,11 @@ const parseDiffs = (node, spaceCnt) => {
   const { value } = node;
   if (typeof value === 'object') {
     const [key] = Object.keys(value);
-    const nodeVal = parseDiffs({ name: key, type: unmod, value: value[key] }, spaceCnt + tabSize);
+    const nodeVal = parseDiffs({ name: key, type: unmodified, value: value[key] },
+      spaceCnt + tabSize);
     return [nodeBegin, nodeVal, nodeEnd].flat();
   }
-  if (type === add || del || unmod) {
+  if (type === add || deleted || unmodified) {
     return (`${indent} ${sign} ${name}: ${value}`);
   }
   throw new Error(`Unknown type of node: '${node.type}'!`);

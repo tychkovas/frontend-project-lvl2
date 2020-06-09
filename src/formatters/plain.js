@@ -1,5 +1,5 @@
 const typesNode = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
-const [unmod, add, del, nested, mod] = typesNode;
+const [unmodified, add, deleted, nested, modified] = typesNode;
 const outValue = (value) => (typeof value !== 'object' ? value : '[complex value]');
 
 const makePlain = (diff) => {
@@ -10,12 +10,11 @@ const makePlain = (diff) => {
       if (node.type === add) {
         return `Property '${pathPrint}' was added with value: ${outValue(value)}`;
       }
-      if (node.type === del) {
+      if (node.type === deleted) {
         return `Property '${pathPrint}' was deleted`;
       }
-      if (node.type === mod) {
-        const { nodes } = node;
-        const [node1, node2] = nodes;
+      if (node.type === modified) {
+        const { node: [node1, node2] } = node;
         return `Property '${pathPrint}' was changed from ${outValue(node1.value)} to ${outValue(node2.value)}`;
       }
       if (node.type === nested) {
@@ -23,7 +22,7 @@ const makePlain = (diff) => {
         return children.map((nestedObj) => getDiffs([...path, node.name], nestedObj))
           .flat();
       }
-      if (node.type === unmod) {
+      if (node.type === unmodified) {
         return [];
       }
       throw new Error(`Unknown type of node: '${node.type}'!`);
