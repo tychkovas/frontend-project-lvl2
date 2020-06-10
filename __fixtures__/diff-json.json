@@ -16,7 +16,7 @@
       {
         "name": "setting3",
         "type": "modified",
-        "node": [
+        "value": [
           {
             "name": "setting3",
             "type": "add",
@@ -73,7 +73,7 @@
       {
         "name": "baz",
         "type": "modified",
-        "node": [
+        "value": [
           {
             "name": "baz",
             "type": "add",
@@ -94,7 +94,7 @@
       {
         "name": "nest",
         "type": "modified",
-        "node": [
+        "value": [
           {
             "name": "nest",
             "type": "add",
