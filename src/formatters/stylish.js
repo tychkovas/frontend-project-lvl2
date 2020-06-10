@@ -3,42 +3,40 @@ const typesNode = ['unmodified', 'add', 'deleted', 'nested', 'modified'];
 const [unmodified, add, deleted, nested, modified] = typesNode;
 const tabSize = 4;
 
-const getSign = (curStatus) => {
-  if (curStatus === add) return ' +';
-  if (curStatus === deleted) return ' -';
-  return '  '; // unmod && nested && mod
+
+const convert = (element, spaces) => {
+  if (typeof element !== 'object') {
+    return element;
+  }
+  const func = (key, value) => `${' '.repeat(spaces)}    ${key}: ${convert(value, spaces + tabSize)}`;
+  const keys = Object.keys(element);
+  const nodeVal = keys.map((key) => func(key, element[key])).flat().join('\n');
+  const result = `{\n${nodeVal}\n${' '.repeat(spaces)}}`;
+  return result;
 };
+
 
 const buildTree = (diff, spacesCount) => {
   const parseDiffs = ({
     name, type, value, children, node,
-  }, spaces) => {
-    const indent = ' '.repeat(spaces);
-    const sign = getSign(type);
-    const nodeBegin = `${indent} ${sign} ${name}: {`;
-    const nodeEnd = `${indent}    }`;
-    if (typeof value === 'object') {
-      const [key] = Object.keys(value);
-      const nodeVal = parseDiffs({ name: key, type: unmodified, value: value[key] },
-        spaces + tabSize);
-      return [nodeBegin, nodeVal, nodeEnd].flat();
-    }
+  }) => {
+    const indent = ' '.repeat(spacesCount);
     switch (type) {
       case modified: {
-        const [valueAdd, valueDel] = node;
-        const nodeAdd = parseDiffs(valueAdd, spaces);
-        const nodeDel = parseDiffs(valueDel, spaces);
-        return [nodeAdd, nodeDel].flat();
+        return node.map((element) => parseDiffs(element, spacesCount));
       }
       case nested: {
-        const nodeValues = buildTree(children, spaces + tabSize);
-        return [nodeBegin, nodeValues, nodeEnd].flat(2);
+        const nodeValues = buildTree(children, spacesCount + tabSize);
+        return [`${indent}    ${name}: {`, nodeValues, `${indent}    }`].flat();
       }
-      case add:
-      case deleted:
-      case unmodified:
-      {
-        return (`${indent} ${sign} ${name}: ${value}`);
+      case add: {
+        return (`${indent}  + ${name}: ${convert(value, spacesCount + tabSize)}`);
+      }
+      case deleted: {
+        return (`${indent}  - ${name}: ${convert(value, spacesCount + tabSize)}`);
+      }
+      case unmodified: {
+        return (`${indent}    ${name}: ${convert(value, spacesCount + tabSize)}`);
       }
       default: {
         throw new Error(`Unknown type of node: '${node.type}'!`);
@@ -46,8 +44,7 @@ const buildTree = (diff, spacesCount) => {
     }
   };
 
-  const textDiff = diff.map((obj) => parseDiffs(obj, spacesCount))
-    .flat().join('\n');
+  const textDiff = diff.map(parseDiffs).flat().join('\n');
   return textDiff;
 };
 
