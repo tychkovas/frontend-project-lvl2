@@ -26,13 +26,13 @@ const buildTree = (diff, spacesCount) => {
         return [`${indent}    ${name}: {`, nodeValues, `${indent}    }`].flat();
       }
       case 'add': {
-        return (`${indent}  + ${name}: ${getPrint(value, spacesCount + tabSize)}`);
+        return `${indent}  + ${name}: ${getPrint(value, spacesCount + tabSize)}`;
       }
       case 'deleted': {
-        return (`${indent}  - ${name}: ${getPrint(value, spacesCount + tabSize)}`);
+        return `${indent}  - ${name}: ${getPrint(value, spacesCount + tabSize)}`;
       }
       case 'unmodified': {
-        return (`${indent}    ${name}: ${getPrint(value, spacesCount + tabSize)}`);
+        return `${indent}    ${name}: ${getPrint(value, spacesCount + tabSize)}`;
       }
       default: {
         throw new Error(`Unknown type of node: '${type}'!`);
