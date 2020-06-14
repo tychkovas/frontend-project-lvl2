@@ -11,25 +11,15 @@
       {
         "name": "setting2",
         "type": "deleted",
-        "value": 200
+        "valueDeleted": 200
       },
       {
         "name": "setting3",
         "type": "modified",
-        "value": [
-          {
-            "name": "setting3",
-            "type": "add",
-            "value": {
-              "key": "value"
-            }
-          },
-          {
-            "name": "setting3",
-            "type": "deleted",
-            "value": true
-          }
-        ]
+        "valueAdd": {
+          "key": "value"
+        },
+        "valueDeleted": true
       },
       {
         "name": "setting6",
@@ -43,24 +33,24 @@
           {
             "name": "ops",
             "type": "add",
-            "value": "vops"
+            "valueAdd": "vops"
           }
         ]
       },
       {
         "name": "follow",
         "type": "add",
-        "value": false
+        "valueAdd": false
       },
       {
         "name": "setting4",
         "type": "add",
-        "value": "blah blah"
+        "valueAdd": "blah blah"
       },
       {
         "name": "setting5",
         "type": "add",
-        "value": {
+        "valueAdd": {
           "key5": "value5"
         }
       }
@@ -73,18 +63,8 @@
       {
         "name": "baz",
         "type": "modified",
-        "value": [
-          {
-            "name": "baz",
-            "type": "add",
-            "value": "bars"
-          },
-          {
-            "name": "baz",
-            "type": "deleted",
-            "value": "bas"
-          }
-        ]
+        "valueAdd": "bars",
+        "valueDeleted": "bas"
       },
       {
         "name": "foo",
@@ -94,34 +74,24 @@
       {
         "name": "nest",
         "type": "modified",
-        "value": [
-          {
-            "name": "nest",
-            "type": "add",
-            "value": "str"
-          },
-          {
-            "name": "nest",
-            "type": "deleted",
-            "value": {
-              "key": "value"
-            }
-          }
-        ]
+        "valueAdd": "str",
+        "valueDeleted": {
+          "key": "value"
+        }
       }
     ]
   },
   {
     "name": "group2",
     "type": "deleted",
-    "value": {
+    "valueDeleted": {
       "abc": 12345
     }
   },
   {
     "name": "group3",
     "type": "add",
-    "value": {
+    "valueAdd": {
       "fee": 100500
     }
   }

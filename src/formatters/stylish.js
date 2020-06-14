@@ -1,35 +1,37 @@
 
 const tabSize = 4;
 
-const getPrint = (element, spaces) => {
+const getPrint = (element, spacesCount) => {
   if (typeof element !== 'object') {
     return element;
   }
-  const func = (key, value) => `${' '.repeat(spaces)}    ${key}: ${getPrint(value, spaces + tabSize)}`;
+  const getEntry = (key, value) => `${' '.repeat(spacesCount)}    ${key}: ${getPrint(value, spacesCount + tabSize)}`;
   const keys = Object.keys(element);
-  const entries = keys.map((key) => func(key, element[key])).flat().join('\n');
-  const result = `{\n${entries}\n${' '.repeat(spaces)}}`;
+  const entries = keys.map((key) => getEntry(key, element[key])).flat().join('\n');
+  const result = `{\n${entries}\n${' '.repeat(spacesCount)}}`;
   return result;
 };
 
-const buildTree = (diff, spacesCount) => {
+const buildTree = (diff, spacesCount = 0) => {
   const parseDiffs = ({
-    name, type, value, children,
+    name, type, value, children, valueDeleted, valueAdd,
   }) => {
     const indent = ' '.repeat(spacesCount);
     switch (type) {
       case 'modified': {
-        return value.map((element) => parseDiffs(element, spacesCount));
+        const elementAdd = `${indent}  + ${name}: ${getPrint(valueAdd, spacesCount + tabSize)}`;
+        const elementDeleted = `${indent}  - ${name}: ${getPrint(valueDeleted, spacesCount + tabSize)}`;
+        return `${elementAdd}\n${elementDeleted}`;
       }
       case 'nested': {
-        const nodeValues = buildTree(children, spacesCount + tabSize);
-        return [`${indent}    ${name}: {`, nodeValues, `${indent}    }`].flat();
+        const childrenTree = buildTree(children, spacesCount + tabSize);
+        return [`${indent}    ${name}: {`, childrenTree, `${indent}    }`].flat();
       }
       case 'add': {
-        return `${indent}  + ${name}: ${getPrint(value, spacesCount + tabSize)}`;
+        return `${indent}  + ${name}: ${getPrint(valueAdd, spacesCount + tabSize)}`;
       }
       case 'deleted': {
-        return `${indent}  - ${name}: ${getPrint(value, spacesCount + tabSize)}`;
+        return `${indent}  - ${name}: ${getPrint(valueDeleted, spacesCount + tabSize)}`;
       }
       case 'unmodified': {
         return `${indent}    ${name}: ${getPrint(value, spacesCount + tabSize)}`;
@@ -45,6 +47,6 @@ const buildTree = (diff, spacesCount) => {
   return textDiff;
 };
 
-const stylish = (diff) => `{\n${buildTree(diff, 0)}\n}`;
+const stylish = (diff) => `{\n${buildTree(diff)}\n}`;
 
 export default stylish;

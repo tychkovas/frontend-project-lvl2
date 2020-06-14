@@ -4,27 +4,27 @@ import { extname } from 'path';
 import parse from './parsers';
 import getFormat from './formatters';
 
-const compareConfig = (configBefore, configAfter) => {
+const buildDiff = (configBefore, configAfter) => {
   const unionKeys = _.union(Object.keys(configBefore), Object.keys(configAfter));
   const configChandges = unionKeys.map((key) => {
     const value1 = configBefore[key];
     const value2 = configAfter[key];
     if (!_.has(configAfter, key)) {
-      return { name: key, type: 'deleted', value: value1 };
+      return { name: key, type: 'deleted', valueDeleted: value1 };
     }
     if (!_.has(configBefore, key)) {
-      return { name: key, type: 'add', value: value2 };
+      return { name: key, type: 'add', valueAdd: value2 };
     }
     if (value1 === value2) {
       return { name: key, type: 'unmodified', value: value2 };
     }
     if (typeof value2 === 'object' && typeof value1 === 'object') {
-      const configMod = compareConfig(value1, value2);
-      return { name: key, type: 'nested', children: configMod };
+      const diffChildren = buildDiff(value1, value2);
+      return { name: key, type: 'nested', children: diffChildren };
     }
-    const valueAdd = { name: key, type: 'add', value: value2 };
-    const valueDel = { name: key, type: 'deleted', value: value1 };
-    return { name: key, type: 'modified', value: [valueAdd, valueDel] };
+    return {
+      name: key, type: 'modified', valueAdd: value2, valueDeleted: value1,
+    };
   });
   return configChandges;
 };
@@ -43,8 +43,8 @@ const genDiff = (filepath1, filepath2, formatType) => {
   const config1 = parse(fileData1, formatFile1);
   const config2 = parse(fileDate2, formatFile2);
 
-  const diffConfig = compareConfig(config1, config2);
-  return format(diffConfig);
+  const diff = buildDiff(config1, config2);
+  return format(diff);
 };
 
 export default genDiff;
