@@ -1,38 +1,39 @@
 
 const tabSize = 4;
 
-const getPrint = (element, spacesCount) => {
+const getPrint = (element, depth) => {
   if (typeof element !== 'object') {
     return element;
   }
-  const getEntry = (key, value) => `${' '.repeat(spacesCount)}    ${key}: ${getPrint(value, spacesCount + tabSize)}`;
+  const indent = ' '.repeat(depth * tabSize);
+  const getEntry = (key, value) => `${indent}    ${key}: ${getPrint(value, depth + 1)}`;
   const keys = Object.keys(element);
   const entries = keys.map((key) => getEntry(key, element[key])).flat().join('\n');
-  const result = `{\n${entries}\n${' '.repeat(spacesCount)}}`;
+  const result = `{\n${entries}\n${indent}}`;
   return result;
 };
 
-const buildTree = (diff, spacesCount = 0) => {
+const buildTree = (diff, depth = 0) => {
   const parseDiffs = ({
     name, type, value, children, valueDeleted, valueAdd,
   }) => {
-    const indent = ' '.repeat(spacesCount);
+    const indent = ' '.repeat(depth * tabSize);
     switch (type) {
       case 'modified': {
-        const elementAdd = `${indent}  + ${name}: ${getPrint(valueAdd, spacesCount + tabSize)}`;
-        const elementDeleted = `${indent}  - ${name}: ${getPrint(valueDeleted, spacesCount + tabSize)}`;
+        const elementAdd = `${indent}  + ${name}: ${getPrint(valueAdd, depth + 1)}`;
+        const elementDeleted = `${indent}  - ${name}: ${getPrint(valueDeleted, depth + 1)}`;
         return `${elementAdd}\n${elementDeleted}`;
       }
       case 'nested': {
-        const childrenTree = buildTree(children, spacesCount + tabSize);
+        const childrenTree = buildTree(children, depth + 1);
         return [`${indent}    ${name}: {`, childrenTree, `${indent}    }`].flat();
       }
       case 'add':
-        return `${indent}  + ${name}: ${getPrint(valueAdd, spacesCount + tabSize)}`;
+        return `${indent}  + ${name}: ${getPrint(valueAdd, depth + 1)}`;
       case 'deleted':
-        return `${indent}  - ${name}: ${getPrint(valueDeleted, spacesCount + tabSize)}`;
+        return `${indent}  - ${name}: ${getPrint(valueDeleted, depth + 1)}`;
       case 'unmodified':
-        return `${indent}    ${name}: ${getPrint(value, spacesCount + tabSize)}`;
+        return `${indent}    ${name}: ${getPrint(value, depth + 1)}`;
       default:
         throw new Error(`Unknown type of node: '${type}'!`);
     }
