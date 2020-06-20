@@ -1,7 +1,7 @@
 const getPrint = (value) => (typeof value !== 'object' ? value : '[complex value]');
 
-const makePlain = (diff) => {
-  const getDiffs = (pathObj, obj) => {
+const makePlain = (diff, rootPath = []) => {
+  const getDiffs = (obj) => {
     const parseDiffs = (path, {
       name, type, children, valueDeleted, valueAdd,
     }) => {
@@ -13,8 +13,7 @@ const makePlain = (diff) => {
           return `Property '${pathPrint}' was changed from ${getPrint(valueDeleted)} to ${getPrint(valueAdd)}`;
         }
         case 'nested': {
-          return children.map((nestedObj) => getDiffs([...path, name], nestedObj))
-            .flat();
+          return makePlain(children, [...path, name]);
         }
         case 'unmodified': return [];
         default: {
@@ -22,10 +21,9 @@ const makePlain = (diff) => {
         }
       }
     };
-    return parseDiffs(pathObj, obj);
+    return parseDiffs(rootPath, obj);
   };
-  const rootPath = [];
-  const textDiff = diff.map((obj) => getDiffs(rootPath, obj))
+  const textDiff = diff.map((obj) => getDiffs(obj))
     .flat()
     .join('\n');
   return textDiff;
