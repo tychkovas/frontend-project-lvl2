@@ -41,4 +41,4 @@ $ sudo npm link
 [![asciicast](https://asciinema.org/a/339451.svg)](https://asciinema.org/a/339451)
 
 ## 'JSON' fortmat out for config YAML
-[![asciicast](https://asciinema.org/a/339452.svg)](https://asciinema.org/a/339452)
+[![asciicast](https://asciinema.org/a/341424.svg)](https://asciinema.org/a/341424)
