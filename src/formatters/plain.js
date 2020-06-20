@@ -7,18 +7,18 @@ const makePlain = (diff, rootPath = []) => {
     }) => {
       const pathPrint = [...path, name].join('.');
       switch (type) {
-        case 'add': return `Property '${pathPrint}' was added with value: ${getPrint(valueAdd)}`;
-        case 'deleted': return `Property '${pathPrint}' was deleted`;
-        case 'modified': {
+        case 'add':
+          return `Property '${pathPrint}' was added with value: ${getPrint(valueAdd)}`;
+        case 'deleted':
+          return `Property '${pathPrint}' was deleted`;
+        case 'modified':
           return `Property '${pathPrint}' was changed from ${getPrint(valueDeleted)} to ${getPrint(valueAdd)}`;
-        }
-        case 'nested': {
+        case 'nested':
           return makePlain(children, [...path, name]);
-        }
-        case 'unmodified': return [];
-        default: {
+        case 'unmodified':
+          return [];
+        default:
           throw new Error(`Unknown type of node: '${type}'!`);
-        }
       }
     };
     return parseDiffs(rootPath, obj);

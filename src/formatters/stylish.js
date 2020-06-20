@@ -27,18 +27,14 @@ const buildTree = (diff, spacesCount = 0) => {
         const childrenTree = buildTree(children, spacesCount + tabSize);
         return [`${indent}    ${name}: {`, childrenTree, `${indent}    }`].flat();
       }
-      case 'add': {
+      case 'add':
         return `${indent}  + ${name}: ${getPrint(valueAdd, spacesCount + tabSize)}`;
-      }
-      case 'deleted': {
+      case 'deleted':
         return `${indent}  - ${name}: ${getPrint(valueDeleted, spacesCount + tabSize)}`;
-      }
-      case 'unmodified': {
+      case 'unmodified':
         return `${indent}    ${name}: ${getPrint(value, spacesCount + tabSize)}`;
-      }
-      default: {
+      default:
         throw new Error(`Unknown type of node: '${type}'!`);
-      }
     }
   };
   const textDiff = diff.map(parseDiffs)
