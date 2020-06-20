@@ -15,13 +15,13 @@ const getPrint = (element, depth) => {
 
 const buildTree = (diff, depth = 0) => {
   const parseDiffs = ({
-    name, type, value, children, valueDeleted, valueAdd,
+    name, type, value, children, valueRemoved, valueAdded,
   }) => {
     const indent = ' '.repeat(depth * tabSize);
     switch (type) {
       case 'modified': {
-        const elementAdd = `${indent}  + ${name}: ${getPrint(valueAdd, depth + 1)}`;
-        const elementDeleted = `${indent}  - ${name}: ${getPrint(valueDeleted, depth + 1)}`;
+        const elementAdd = `${indent}  + ${name}: ${getPrint(valueAdded, depth + 1)}`;
+        const elementDeleted = `${indent}  - ${name}: ${getPrint(valueRemoved, depth + 1)}`;
         return `${elementAdd}\n${elementDeleted}`;
       }
       case 'nested': {
@@ -29,9 +29,9 @@ const buildTree = (diff, depth = 0) => {
         return [`${indent}    ${name}: {`, childrenTree, `${indent}    }`].flat();
       }
       case 'add':
-        return `${indent}  + ${name}: ${getPrint(valueAdd, depth + 1)}`;
+        return `${indent}  + ${name}: ${getPrint(value, depth + 1)}`;
       case 'deleted':
-        return `${indent}  - ${name}: ${getPrint(valueDeleted, depth + 1)}`;
+        return `${indent}  - ${name}: ${getPrint(value, depth + 1)}`;
       case 'unmodified':
         return `${indent}    ${name}: ${getPrint(value, depth + 1)}`;
       default:

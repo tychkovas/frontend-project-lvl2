@@ -11,15 +11,15 @@
       {
         "name": "setting2",
         "type": "deleted",
-        "valueDeleted": 200
+        "value": 200
       },
       {
         "name": "setting3",
         "type": "modified",
-        "valueAdd": {
+        "valueAdded": {
           "key": "value"
         },
-        "valueDeleted": true
+        "valueRemoved": true
       },
       {
         "name": "setting6",
@@ -33,24 +33,24 @@
           {
             "name": "ops",
             "type": "add",
-            "valueAdd": "vops"
+            "value": "vops"
           }
         ]
       },
       {
         "name": "follow",
         "type": "add",
-        "valueAdd": false
+        "value": false
       },
       {
         "name": "setting4",
         "type": "add",
-        "valueAdd": "blah blah"
+        "value": "blah blah"
       },
       {
         "name": "setting5",
         "type": "add",
-        "valueAdd": {
+        "value": {
           "key5": "value5"
         }
       }
@@ -63,8 +63,8 @@
       {
         "name": "baz",
         "type": "modified",
-        "valueAdd": "bars",
-        "valueDeleted": "bas"
+        "valueAdded": "bars",
+        "valueRemoved": "bas"
       },
       {
         "name": "foo",
@@ -74,8 +74,8 @@
       {
         "name": "nest",
         "type": "modified",
-        "valueAdd": "str",
-        "valueDeleted": {
+        "valueAdded": "str",
+        "valueRemoved": {
           "key": "value"
         }
       }
@@ -84,14 +84,14 @@
   {
     "name": "group2",
     "type": "deleted",
-    "valueDeleted": {
+    "value": {
       "abc": 12345
     }
   },
   {
     "name": "group3",
     "type": "add",
-    "valueAdd": {
+    "value": {
       "fee": 100500
     }
   }

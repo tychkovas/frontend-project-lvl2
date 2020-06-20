@@ -10,10 +10,10 @@ const buildDiff = (configBefore, configAfter) => {
     const value1 = configBefore[key];
     const value2 = configAfter[key];
     if (!_.has(configAfter, key)) {
-      return { name: key, type: 'deleted', valueDeleted: value1 };
+      return { name: key, type: 'deleted', value: value1 };
     }
     if (!_.has(configBefore, key)) {
-      return { name: key, type: 'add', valueAdd: value2 };
+      return { name: key, type: 'add', value: value2 };
     }
     if (value1 === value2) {
       return { name: key, type: 'unmodified', value: value2 };
@@ -23,7 +23,7 @@ const buildDiff = (configBefore, configAfter) => {
       return { name: key, type: 'nested', children: diffChildren };
     }
     return {
-      name: key, type: 'modified', valueAdd: value2, valueDeleted: value1,
+      name: key, type: 'modified', valueAdded: value2, valueRemoved: value1,
     };
   });
   return configChandges;
